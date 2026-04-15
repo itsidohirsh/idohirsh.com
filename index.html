@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>עידו הירש</title>
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans Hebrew', Arial, sans-serif;
+      direction: rtl;
+      background: #fff;
+      color: #000;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    :root { --navy: #06227A; --navy2: #0d3db5; }
+
+    /* ── Animated gradient ── */
+    @keyframes gradientShift {
+      0% { background-position: 0% 0%; }
+      25% { background-position: 100% 0%; }
+      50% { background-position: 100% 100%; }
+      75% { background-position: 0% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+
+    .animated-gradient {
+      background: linear-gradient(135deg, #020e3a, #06227A, #0d3db5, #1650d0, #0d3db5, #06227A, #020e3a);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+    }
+
+    /* ── Typing animation ── */
+    @keyframes typingLoop {
+      0% { width: 0; }
+      30% { width: 100%; }
+      80% { width: 100%; }
+      90% { width: 0; }
+      100% { width: 0; }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: var(--navy); }
+    }
+
+    .typewriter {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .typewriter .typed-text {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      border-left: 2px solid var(--navy);
+      animation: typingLoop 6s steps(20) infinite, blink 0.7s step-end infinite;
+    }
+
+    .typewriter-about .typed-text {
+      animation: typingLoop 5s steps(12) infinite, blink 0.7s step-end infinite;
+    }
+
+    /* ── Dot pulse ── */
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.15); }
+    }
+
+    /* ── Dot-circle SVG icon (FA far-dot-circle) ── */
+    .dot-icon svg { display: block; }
+
+    .hero-subtitle .dot-icon svg,
+    .section-label .dot-icon svg {
+      animation: dotPulse 2.5s ease-in-out infinite;
+    }
+
+    /* ── Buttons ── */
+    .btn-navy {
+      display: inline-block;
+      color: #fff;
+      border-radius: 50px;
+      padding: 14px 40px;
+      font-weight: 700;
+      font-size: 18px;
+      font-family: 'Noto Sans Hebrew', Arial, sans-serif;
+      text-decoration: none;
+      border: none;
+      white-space: nowrap;
+      margin-bottom: 22px;
+      box-shadow: 0 6px 20px rgba(3,18,74,0.3);
+    }
+
+    .btn-outline-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid #fff;
+      color: #fff;
+      border-radius: 50px;
+      padding: 10px 26px;
+      font-family: 'Noto Sans Hebrew', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      background: transparent;
+      text-decoration: none;
+      white-space: nowrap;
+      direction: ltr; /* keep arrows on left, text on right */
+    }
+
+    .social-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .card-shadow { box-shadow: 0 8px 40px rgba(0,0,0,0.13); }
+
+    .bio-text p { margin-bottom: 13px; line-height: 1.8; }
+    .bio-text p:last-child { margin-bottom: 0; }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    .hero {
+      position: relative;
+      display: flex;
+      height: 460px;
+      overflow: visible;
+      z-index: 1;
+    }
+
+    /* 1st child (RTL flex → visual RIGHT): hex + text */
+    .hero-text {
+      flex: 1;
+      background-color: #e8eaf2;
+      background-image: url('assets/images/bg-5.jpg');
+      background-size: cover;
+      background-position: center right;
+      display: flex;
+      align-items: flex-end;           /* push content toward the bottom */
+      justify-content: flex-start;     /* RTL: flex-start = visual RIGHT */
+      padding: 0;
+    }
+
+    .hero-text-inner {
+      max-width: 440px;
+      width: 100%;
+      text-align: right;
+    }
+
+    /* Overlay aligned to the same 1200px container as the bio card */
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 44px 90px 44px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start; /* RTL → visual right */
+      direction: rtl;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .hero-overlay .hero-text-inner { pointer-events: auto; }
+
+    /* subtitle: icon on RIGHT (first in DOM), text on LEFT */
+    .hero-subtitle {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 12px;
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 600;
+      direction: rtl;
+    }
+
+    .hero-text-inner h1 {
+      font-size: 67px;
+      font-weight: 900;
+      color: #000;
+      line-height: 1.05;
+      margin-bottom: 26px;
+      letter-spacing: -0.5px;
+    }
+
+    /* 2nd child (RTL flex → visual LEFT): navy + photo */
+    .hero-photo {
+      width: 42%;
+      background: linear-gradient(135deg, #020e3a, #06227A, #0d3db5, #1650d0, #0d3db5, #06227A, #020e3a);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      position: relative;
+      overflow: visible;
+      flex-shrink: 0;
+      z-index: 999999999;
+    }
+
+    .hero-photo img {
+      position: absolute;
+      top: 60px;
+      right: -28px;
+      height: 142%;
+      width: auto;
+      object-fit: contain;
+      object-position: bottom center;
+    }
+
+    /* ════════════════════════════════
+       BIO CARD
+       LTR: spacer(LEFT) + card(RIGHT)
+       No z-index on section — only on card
+    ════════════════════════════════ */
+    .bio-section {
+      position: relative;
+      margin-top: -90px;
+      padding-bottom: 52px;
+      background: transparent;
+    }
+
+    .bio-section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 44px;
+      display: flex;
+      direction: ltr;
+    }
+
+    .bio-spacer {
+      width: 42%;
+      flex-shrink: 0;
+      background: transparent;
+    }
+
+    .bio-card {
+      flex: 1;
+      background: #fff;
+      border-radius: 36px;
+      padding: 36px 46px;
+      direction: rtl;
+      text-align: right;
+      position: relative;
+      z-index: 10; /* above hero photo */
+    }
+
+    .bio-card h2 {
+      font-size: 21px;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    /* ════════════════════════════════
+       ABOUT
+       RTL flex: 1st child = RIGHT (photos), 2nd = LEFT (text)
+    ════════════════════════════════ */
+    .about-section {
+      background: #fff;
+      padding: 44px 0 72px;
+    }
+
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 44px;
+      display: flex;
+      gap: 52px;
+      align-items: flex-start;
+    }
+
+    /* 1st child → RIGHT: collage photos */
+    .about-photos {
+      width: 340px;
+      height: 600px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .about-photos img {
+      position: absolute;
+      border-radius: 14px;
+      object-fit: cover;
+    }
+
+    /* Large photo — upper-right of collage */
+    .about-photos img.large {
+      top: 0;
+      right: 0;
+      width: 270px;
+      height: 410px;
+      object-position: top center;
+      z-index: 1;
+    }
+
+    /* Small photo — lower-left, overlapping */
+    .about-photos img.small {
+      bottom: 0;
+      left: 0;
+      width: 185px;
+      height: 250px;
+      z-index: 2;
+    }
+
+    /* 2nd child → LEFT: text */
+    .about-text {
+      flex: 1;
+      text-align: right;
+      direction: rtl;
+    }
+
+    /* label: icon on RIGHT (first in DOM), text second */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 10px;
+      color: var(--navy);
+      font-size: 15px;
+      font-weight: 600;
+      direction: rtl;
+    }
+
+    .about-text h2 {
+      font-size: 46px;
+      font-weight: 900;
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    .about-text .bio-text {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.8;
+    }
+
+    /* ════════════════════════════════
+       DARK BOTTOM WRAPPER
+    ════════════════════════════════ */
+    .dark-bottom {
+      background: #000;
+    }
+
+    /* ════════════════════════════════
+       DARK CTA
+    ════════════════════════════════ */
+    .cta-section {
+      background: transparent;
+      padding: 60px 60px;
+    }
+
+    .cta-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+    }
+
+    .cta-quote {
+      color: #fff;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.55;
+      font-family: 'Noto Sans Hebrew', Arial, sans-serif;
+      max-width: 640px;
+      text-align: center;
+    }
+
+    .cta-quote .quote-attr {
+      display: block;
+      font-size: 20px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    /* ════════════════════════════════
+       FOOTER CARD
+    ════════════════════════════════ */
+    .footer-card-section {
+      background: transparent;
+      padding: 0 40px 56px;
+    }
+
+    .footer-card {
+      max-width: 480px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #020e3a, #06227A, #0d3db5, #1650d0, #0d3db5, #06227A, #020e3a);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      border-radius: 22px;
+      padding: 48px 40px;
+      text-align: center;
+    }
+
+    .footer-card h2 { font-size: 36px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+    .footer-card p  { font-size: 17px; font-weight: 600; color: rgba(255,255,255,0.75); margin-bottom: 26px; }
+
+    /* ════════════════════════════════
+       SIGNATURE
+    ════════════════════════════════ */
+    .signature-section {
+      background: transparent;
+      padding: 30px 40px 28px;
+      text-align: center;
+    }
+
+    .signature-section img {
+      max-width: 640px;
+      width: 82%;
+    }
+
+    /* ════════════════════════════════
+       COPYRIGHT
+    ════════════════════════════════ */
+    footer {
+      background: transparent;
+      padding: 18px 40px;
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* ════════════════════════════════
+       MOBILE  ≤ 768px
+    ════════════════════════════════ */
+    @media (max-width: 768px) {
+
+      /* Hero */
+      .hero {
+        height: 400px;
+        overflow: hidden;
+      }
+
+      .hero-text {
+        flex: 1;
+        padding: 0;
+        align-items: flex-end;
+        background-position: center;
+      }
+
+      .hero-overlay {
+        padding: 0 18px 28px;
+        align-items: flex-start;
+        padding-top: 72px;
+      }
+
+      .hero-text-inner h1 { font-size: 48px !important; margin-bottom: 16px; }
+      .hero-subtitle { font-size: 13px; margin-bottom: 8px; }
+      .btn-navy { padding: 10px 24px; font-size: 14px; margin-bottom: 6px; }
+
+      .hero-photo {
+        width: 44%;
+        overflow: visible;
+        z-index: 999999999 !important;
+      }
+
+      .hero-photo img {
+        right: -75px;
+        top: 20px;
+        bottom: auto;
+        height: 140%;
+      }
+
+      /* Bio card */
+      .bio-section { margin-top: 0; padding-bottom: 24px; }
+      .bio-section-inner { flex-direction: column; padding: 0 18px; }
+      .bio-spacer { display: none; }
+      .bio-card {
+        border-radius: 22px;
+        padding: 22px 20px;
+        margin-top: -20px;
+        position: relative;
+        z-index: 10;
+      }
+      .bio-card h2 { font-size: 17px; margin-bottom: 12px; }
+      .bio-card .bio-text { font-size: 14px !important; }
+
+      /* About */
+      .about-section { padding: 20px 0 40px; }
+      .about-inner {
+        flex-direction: column;
+        padding: 0 18px;
+        gap: 24px;
+      }
+
+      .about-photos {
+        width: 100%;
+        height: auto;
+        order: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .about-photos img.large {
+        position: relative;
+        top: auto; right: auto;
+        width: 100%;
+        height: 440px;
+        border-radius: 14px;
+        object-position: top center;
+      }
+
+      .about-photos img.small { display: none; }
+
+      .about-text { order: 1; }
+      .about-text h2 { font-size: 30px; }
+      .about-text .bio-text { font-size: 14px; line-height: 1.75; }
+      .section-label { font-size: 13px; }
+
+      /* CTA */
+      .cta-section { padding: 40px 22px; }
+      .cta-inner { gap: 20px; }
+      .cta-quote { font-size: 19px; font-weight: 800; }
+      .cta-quote .quote-attr { font-size: 17px; }
+
+      /* Footer */
+      .cta-section { padding-bottom: 36px; }
+      .footer-card-section { padding: 0 22px 24px; }
+      .footer-card { padding: 30px 22px; }
+      .footer-card h2 { font-size: 26px; }
+      .footer-card p { font-size: 15px; margin-bottom: 20px; }
+
+      .signature-section { padding: 10px 16px 8px; }
+      .signature-section img { width: 84%; max-width: none; }
+
+      footer { padding: 10px 20px 18px; }
+      footer p { font-size: 13px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero { height: 250px; }
+      .hero-text-inner h1 { font-size: 32px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     HERO
+     RTL flex: 1st (RIGHT) = hex+text, 2nd (LEFT) = navy+photo
+══════════════════════════════════ -->
+<section class="hero">
+
+  <!-- 1st → RIGHT: hex background -->
+  <div class="hero-text"></div>
+
+  <!-- 2nd → LEFT: navy + photo -->
+  <div class="hero-photo">
+    <img src="assets/images/hero-photo.png" alt="עידו הירש" />
+  </div>
+
+  <!-- Overlay text — aligned to 1200px container so it lines up with bio card -->
+  <div class="hero-overlay">
+    <div class="hero-text-inner">
+      <div class="hero-subtitle typewriter">
+        <span class="dot-icon">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="var(--navy)">
+            <path d="M256 56c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m0-48C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 168c-44.183 0-80 35.817-80 80s35.817 80 80 80 80-35.817 80-80-35.817-80-80-80z"/>
+          </svg>
+        </span>
+        <span class="typed-text">נעים להכיר</span>
+      </div>
+      <h1>עידו הירש</h1>
+      <a href="#about" class="btn-navy animated-gradient">קצת עליי</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════
+     BIO CARD
+══════════════════════════════════ -->
+<section class="bio-section">
+  <div class="bio-section-inner">
+    <div class="bio-spacer"></div>
+    <div class="bio-card card-shadow">
+      <h2>בן 23, יזם, איקומרס.</h2>
+      <div class="bio-text" style="font-size:17px; font-weight:600;">
+        <p>לאורך הדרך עברתי המון.</p>
+        <p>הפסדתי הרבה כסף, ניסיתי מלא תחומים חדשים, נכשלתי אינספור פעמים.</p>
+        <p>לפני שלוש שנים עשיתי את המכירה הראשונה שלי, והיום אני בעלים של מספר מותגים עם מעל 7 ספרות בהכנסה.</p>
+        <p>והכי כיף, אני יודע שאני רק בתחילת הדרך שלי.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     ABOUT
+     RTL flex: 1st (RIGHT) = photos, 2nd (LEFT) = text
+══════════════════════════════════ -->
+<section id="about" class="about-section">
+  <div class="about-inner">
+
+    <!-- 1st → RIGHT: collage photos -->
+    <div class="about-photos">
+      <img src="assets/images/photo-flags.jpg" alt="עידו הירש" class="large" />
+      <img src="assets/images/photo-bench.jpg" alt="עידו הירש" class="small" />
+    </div>
+
+    <!-- 2nd → LEFT: text -->
+    <div class="about-text">
+      <!-- Label: icon FIRST (rightmost in RTL), text second -->
+      <div class="section-label typewriter typewriter-about">
+        <span class="dot-icon">
+          <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="var(--navy)">
+            <path d="M256 56c110.532 0 200 89.451 200 200 0 110.532-89.451 200-200 200-110.532 0-200-89.451-200-200 0-110.532 89.451-200 200-200m0-48C119.033 8 8 119.033 8 256s111.033 248 248 248 248-111.033 248-248S392.967 8 256 8zm0 168c-44.183 0-80 35.817-80 80s35.817 80 80 80 80-35.817 80-80-35.817-80-80-80z"/>
+          </svg>
+        </span>
+        <span class="typed-text">קצת עליי</span>
+      </div>
+      <h2>אודות</h2>
+      <div class="bio-text">
+        <p>נעים להכיר, עידו הירש.<br>בן 23, יזם, בעלים של מספר מותגי איקומרס, מעל ל-3 שנות ניסיון בתחום ומעל 7 ספרות בהכנסה.<br>לפני שלוש שנים, תוך כדי 3+ שנות שירות ביחידה 8200 ומסלול ישיר להייטק, החלטתי לעשות שינוי כיוון.</p>
+        <p>תמיד בער בי לעשות כסף.<br>מגיל קטן ניסיתי כל מיני יוזמויות – למכור ספריי שלג ביום העצמאות, לקנות ביטקוין בגיל 14 עם עוד כמה חברים, למכור אופניים באיביי.<br>ניסיתי הכל, אבל אף פעם לא לקחתי את זה 100% ברצינות, תמיד זה היה דבר משני למשהו עיקרי אחר.<br>בין אם זה הלימודים, החברים, משחקי המחשב או הכדורסל ששיחקתי באופן מקצועי מעל עשור ואפילו שיחקתי בנבחרת ישראל.</p>
+        <p>שנה לתוך השירות הצבאי שלי, נכנסתי לשגרה ופתאום נהיו לי שעתיים פנויות ביום.<br>עד היום אני גאה בהחלטה הזאת ולא יודע להסביר אותה, אבל משהו בי פשוט אמר לי שזאת ההזדמנות שלי.<br>לקחתי את הסיכון, השקעתי, חקרתי ולמדתי שעות על איקומרס, ותוך כמה חודשים הקמתי את המותג הראשון שלי.<br>לפני שלוש שנים עשיתי את המכירה הראשונה שלי, והיום אני בעלים של מספר מותגים, עם מעל 7 ספרות בהכנסה.</p>
+        <p>לאורך הדרך עברתי המון.<br>הפסדתי הרבה כסף, ניסיתי המון תחומים חדשים, התגברתי על המון קשיים, והכרתי המון אנשים ויזמים מעוררי השראה.<br>הרבה עליות ומורדות שהביאו אותי לאן שאני היום, ופתחו לי דלתות ליוזמויות גדולות בהן אני יוזם היום.</p>
+        <p>אני כותב את כל זה בעיקר בשביל עצמי.<br>לפעמים חשוב לעצור רגע ולהגיד תודה על איפה שאני נמצא.<br>אבל הכי כיף, אני יודע שאני רק בתחילת הדרך שלי.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     DARK BOTTOM — single black wrapper to prevent subpixel gaps
+══════════════════════════════════ -->
+<div class="dark-bottom">
+
+  <section class="cta-section">
+    <div class="cta-inner">
+      <blockquote class="cta-quote" dir="ltr">
+        "Some people want it to happen, some wish it would happen, others make it happen."
+        <span class="quote-attr">– Michael Jordan</span>
+      </blockquote>
+      <a href="#" class="btn-outline-white">
+        <svg viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor">
+          <path d="M177 255.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 351.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 425.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1zm-34-192L7 199.7c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l96.4-96.4 96.4 96.4c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9l-136-136c-9.2-9.4-24.4-9.4-33.8 0z"/>
+        </svg>
+        חזרה למעלה
+      </a>
+    </div>
+  </section>
+
+  <section class="footer-card-section">
+    <div class="footer-card">
+      <h2>עידו הירש</h2>
+      <p>בן 23, יזם, איקומרס.</p>
+      <a href="https://www.instagram.com/itsidohirsh" class="social-circle" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white">
+          <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="signature-section">
+    <img src="assets/images/signature.png" alt="Hirsh signature" />
+  </section>
+
+  <footer>
+    <p>© עידו הירש 2026. כל הזכויות שמורות.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
