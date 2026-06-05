@@ -224,15 +224,22 @@
         dotsWrap.appendChild(dot);
       }
       function setHeight(){ carousel.style.height = slideEls[idx].offsetHeight + 'px'; }
+      var leftBtn = document.querySelector('.nav.prev');   // פיזית משמאל (‹) — קדימה לתמונה הבאה
+      var rightBtn = document.querySelector('.nav.next');  // פיזית מימין (›) — אחורה לתמונה הקודמת
+      function updateArrows(){
+        leftBtn.style.visibility  = (idx >= total - 1) ? 'hidden' : 'visible';
+        rightBtn.style.visibility = (idx <= 0) ? 'hidden' : 'visible';
+      }
       function go(i){
-        idx = (i + total) % total;
+        idx = Math.max(0, Math.min(total - 1, i));   // ללא לופ — נעצר בקצוות
         slides.style.transform = 'translateX(' + (idx * 100) + '%)';
         var dots = dotsWrap.children;
         for (var k = 0; k < dots.length; k++) dots[k].className = (k === idx ? 'on' : '');
+        updateArrows();
         setHeight();
       }
-      document.querySelector('.nav.next').addEventListener('click', function(){ go(idx + 1); });
-      document.querySelector('.nav.prev').addEventListener('click', function(){ go(idx - 1); });
+      leftBtn.addEventListener('click', function(){ go(idx + 1); });
+      rightBtn.addEventListener('click', function(){ go(idx - 1); });
       // החלקה במובייל (swipe)
       var startX = null;
       carousel.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, { passive:true });
