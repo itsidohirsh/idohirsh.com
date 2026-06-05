@@ -22,6 +22,7 @@
       background: linear-gradient(135deg,#7b2ff7,#f107a3 55%,#ff8a00);
       background-size:300% 300%; animation:bgmove 14s ease infinite;
       min-height:100vh; overflow-x:hidden;
+      touch-action:manipulation; /* מבטל זום בדאבל-טאפ (מקישות מהירות) — שומר גלילה/צביטה */
     }
     @keyframes bgmove { 0%{background-position:0 50%} 50%{background-position:100% 50%} 100%{background-position:0 50%} }
 
@@ -72,7 +73,7 @@
     .facts h2 { margin:.2em 0 .5em; font-size:1.2rem; }
     .facts li { margin:9px 0; font-weight:600; }
 
-    .btn { font-family:inherit; cursor:pointer; border:none; background:var(--gold); color:var(--ink); font-weight:900; font-size:1.2rem; padding:16px 34px; border-radius:50px; box-shadow:0 8px 0 #c9a800; transition:transform .07s, box-shadow .07s; }
+    .btn { font-family:inherit; cursor:pointer; border:none; background:var(--gold); color:var(--ink); font-weight:900; font-size:1.2rem; padding:16px 34px; border-radius:50px; box-shadow:0 8px 0 #c9a800; transition:transform .07s, box-shadow .07s; touch-action:manipulation; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
     .btn:active { transform:translateY(6px); box-shadow:0 2px 0 #c9a800; }
     .count { margin-top:14px; font-weight:800; font-size:1.05rem; min-height:1.4em; }
 
@@ -241,13 +242,15 @@
       leftBtn.addEventListener('click', function(){ go(idx + 1); });
       rightBtn.addEventListener('click', function(){ go(idx - 1); });
       // החלקה במובייל (swipe)
-      var startX = null;
-      carousel.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, { passive:true });
+      var startX = null, startY = null;
+      carousel.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, { passive:true });
       carousel.addEventListener('touchend', function(e){
         if (startX === null) return;
         var dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) { go(dx < 0 ? idx - 1 : idx + 1); }
-        startX = null;
+        var dy = e.changedTouches[0].clientY - startY;
+        // רק החלקה אופקית מכוונת (סף גבוה + ברור שאופקי > אנכי) — כדי שגלילה אנכית לא תחליף תמונה
+        if (Math.abs(dx) > 75 && Math.abs(dx) > Math.abs(dy) * 1.5) { go(dx < 0 ? idx - 1 : idx + 1); }
+        startX = null; startY = null;
       }, { passive:true });
       slides.querySelectorAll('img').forEach(function(im){
         if (im.complete) setHeight(); else im.addEventListener('load', setHeight);
