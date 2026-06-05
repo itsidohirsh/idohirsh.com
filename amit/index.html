@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>👑 עמית — אזרחית הכבוד של האינטרנט 👑</title>
-  <meta name="description" content="האתר הרשמי, המאומת והבלעדי של מועדון המעריצים של עמית. כניסה חינם. יציאה אסורה.">
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🍫</text></svg>'>
+  <title>עמית 👑 — מועדון המעריצים</title>
+  <meta name="description" content="מועדון המעריצים (הקטן והלא-רשמי בכלל) של עמית.">
   <meta name="robots" content="noindex, nofollow">
-  <meta property="og:title" content="👑 עמית — אזרחית הכבוד של האינטרנט">
-  <meta property="og:description" content="מועדון המעריצים הרשמי. 12 מיליון חברים ועוד אחד (אתה).">
+  <meta property="og:title" content="עמית 👑 — מועדון המעריצים">
+  <meta property="og:description" content="מועדון המעריצים של עמית. חבר אחד נלהב (אני).">
   <meta property="og:image" content="amit.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,9 +25,12 @@
     }
     @keyframes bgmove { 0%{background-position:0 50%} 50%{background-position:100% 50%} 100%{background-position:0 50%} }
 
-    .ticker { background:#000; color:var(--gold); font-weight:800; padding:9px 0; white-space:nowrap; overflow:hidden; border-bottom:3px solid var(--gold); }
-    .ticker span { display:inline-block; padding-left:100%; animation:scroll 18s linear infinite; }
-    @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-100%)} }
+    .ticker { background:#000; color:var(--gold); font-weight:800; padding:9px 0; overflow:hidden; border-bottom:3px solid var(--gold); }
+    .ticker__track { display:inline-flex; white-space:nowrap; will-change:transform; animation:ticker 32s linear infinite; }
+    .ticker__track > span { flex:0 0 auto; }
+    .ticker__track .ti { display:inline-block; unicode-bidi:isolate; font-style:normal; }
+    .ticker__track .ti::after { content:"·"; margin-inline:1.1rem; color:var(--gold); opacity:.55; }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(50%)} }
 
     .wrap { max-width:680px; margin:0 auto; padding:26px 20px 70px; }
     .crown { font-size:3rem; animation:float 2.6s ease-in-out infinite; }
@@ -36,7 +40,7 @@
     .sub { font-size:1.05rem; opacity:.95; margin:0 auto 22px; max-width:460px; }
 
     .photo-frame { position:relative; width:230px; height:230px; margin:10px auto 6px; }
-    .photo-frame img { width:100%; height:100%; object-fit:cover; border-radius:50%; border:7px solid var(--gold); box-shadow:0 12px 40px rgba(0,0,0,.45); animation:bob 4s ease-in-out infinite; }
+    .photo-frame img { width:100%; height:100%; object-fit:cover; border-radius:50%; border:7px solid var(--gold); box-shadow:0 12px 40px rgba(0,0,0,.45); animation:bob 4s ease-in-out infinite; transition:opacity .25s ease; }
     @keyframes bob { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
     .photo-frame .badge { position:absolute; top:-10px; inset-inline-start:-6px; font-size:2.4rem; animation:float 3.1s ease-in-out infinite; }
     .photo-frame .verified { position:absolute; bottom:8px; inset-inline-end:8px; background:#1d9bf0; color:#fff; border-radius:50%; width:46px; height:46px; display:grid; place-items:center; font-size:1.5rem; border:3px solid #fff; box-shadow:0 4px 14px rgba(0,0,0,.4); }
@@ -52,6 +56,18 @@
     .moment img { width:100%; max-width:420px; border-radius:14px; border:4px solid var(--gold); box-shadow:0 10px 30px rgba(0,0,0,.4); }
     .moment .cap { font-weight:700; margin-top:10px; font-size:.98rem; }
     .moment .cap small { display:block; opacity:.85; font-weight:600; font-size:.82rem; margin-top:3px; }
+    .carousel { position:relative; overflow:hidden; border-radius:14px; transition:height .35s ease; }
+    .slides { display:flex; direction:rtl; align-items:flex-start; transition:transform .35s ease; }
+    .slide { flex:0 0 100%; direction:rtl; }
+    .carousel .nav { position:absolute; top:42%; transform:translateY(-50%); z-index:2; width:34px; height:48px; border:none; background:none; padding:0; color:#fff; font-size:2.6rem; font-weight:900; line-height:1; cursor:pointer; display:grid; place-items:center; direction:ltr; text-shadow:0 2px 7px rgba(0,0,0,.75); }
+    .carousel .nav.prev { left:6px; animation:nudgeL 1.6s ease-in-out infinite; }
+    .carousel .nav.next { right:6px; animation:nudgeR 1.6s ease-in-out infinite; }
+    .carousel .nav:active { transform:translateY(-50%) scale(.85); }
+    @keyframes nudgeL { 0%,100%{transform:translateY(-50%)} 50%{transform:translateY(-50%) translateX(-5px)} }
+    @keyframes nudgeR { 0%,100%{transform:translateY(-50%)} 50%{transform:translateY(-50%) translateX(5px)} }
+    .dots { display:flex; gap:8px; justify-content:center; margin-top:12px; }
+    .dots b { width:9px; height:9px; border-radius:50%; background:rgba(255,255,255,.4); cursor:pointer; transition:background .2s; }
+    .dots b.on { background:var(--gold); }
     .facts { background:rgba(0,0,0,.22); border-radius:18px; padding:18px 20px; margin:8px 0 26px; text-align:right; }
     .facts h2 { margin:.2em 0 .5em; font-size:1.2rem; }
     .facts li { margin:9px 0; font-weight:600; }
@@ -66,32 +82,46 @@
   </style>
 </head>
 <body>
-  <div class="ticker"><span>🚨 חדשות מזעזעות: עמית שוב צודקת בכל דבר · 🏆 זכתה בפרס "האדם הכי עמית 2026" · 📈 מחירי המניות עלו כשחייכה · 👑 רשמית: הכי שווה במשרד · 🔔 לחצו "להעריץ" עכשיו או שעמית תיעלב · ☕ הקפה שלה חזק יותר מכולכם ·&nbsp;&nbsp;</span></div>
+  <div class="ticker"><div class="ticker__track">
+    <span><i class="ti">🌟 עמית שוב צודקת (כרגיל)</i><i class="ti">☕ הקפה שלה חזקה משלכם</i><i class="ti">😌 כן, היא ראתה שלא לחצת</i><i class="ti">🎯 תמיד יודעת מה לומר</i><i class="ti">📸 יוצאת טוב גם בלי לנסות</i><i class="ti">🍕 לוקחת את הפרוסה הכי גדולה (ובצדק)</i><i class="ti">⭐ דירוג 5 כוכבים, אין כוכב שישי</i><i class="ti">👑 ועוד לא אמרנו כלום</i></span>
+    <span aria-hidden="true"><i class="ti">🌟 עמית שוב צודקת (כרגיל)</i><i class="ti">☕ הקפה שלה חזקה משלכם</i><i class="ti">😌 כן, היא ראתה שלא לחצת</i><i class="ti">🎯 תמיד יודעת מה לומר</i><i class="ti">📸 יוצאת טוב גם בלי לנסות</i><i class="ti">🍕 לוקחת את הפרוסה הכי גדולה (ובצדק)</i><i class="ti">⭐ דירוג 5 כוכבים, אין כוכב שישי</i><i class="ti">👑 ועוד לא אמרנו כלום</i></span>
+  </div></div>
 
   <div class="wrap">
     <div class="crown">👑</div>
     <h1>עמית</h1>
-    <p class="sub">ברוכים הבאים לאתר הרשמי, המאומת והבלעדי של <b>מועדון המעריצים של עמית</b>.<br>כניסה חינם · יציאה אסורה · צילום מסך חובה.</p>
+    <p class="sub">ברוכים הבאים ל<b>מועדון המעריצים של עמית</b>.<br>כניסה חופשית · אין יציאה.</p>
 
     <div class="photo-frame">
       <span class="badge">👑</span>
-      <img src="amit.jpg" alt="עמית, אגדה חיה">
+      <img src="amit.jpg" alt="עמית 👑">
       <div class="verified" title="מאומת">✔</div>
     </div>
-    <div class="caption">עמית, אגדה חיה <small>"הפרצוף ששבר את האינטרנט" — כל מי שראה</small></div>
+    <div class="caption">עמית, נסיכה קטנה <small>(ומכוערת)</small></div>
 
     <div class="stats">
       <div class="stat"><b id="fans">12,847,392</b><span>מעריצים מושבעים</span></div>
-      <div class="stat"><b>47</b><span>פרסים יוקרתיים</span></div>
-      <div class="stat"><b>∞</b><span>רמת אגדה</span></div>
-      <div class="stat"><b>0</b><span>פעמים שטעתה</span></div>
+      <div class="stat"><b>∞</b><span>חמידות</span></div>
     </div>
 
     <div class="moment">
-      <img src="amit2.jpg" alt="רגע היסטורי עם עמית">
-      <div class="cap">📸 רגע היסטורי מתועד
-        <small>עמית מסבירה לבחור עם חולצת "LEGEND" מי האגדה האמיתית כאן. (רמז: לא החולצה.) 🏆</small>
+      <div class="carousel">
+        <div class="slides" id="slides">
+          <div class="slide">
+            <img src="moment1.jpg" alt="רגע היסטורי עם עמית">
+            <div class="cap">📸 רגע היסטורי
+              <small>עמית מסבירה לעידו מי הכוכב כאן. (רמז: לא עידו.) 🏆</small>
+            </div>
+          </div>
+          <div class="slide">
+            <img src="moment2.jpg" alt="עמית ועידו בשדה התעופה">
+            <div class="cap">המשך יבוא<br>✈️ ❤️</div>
+          </div>
+        </div>
+        <button class="nav prev" aria-label="הקודם">‹</button>
+        <button class="nav next" aria-label="הבא">›</button>
       </div>
+      <div class="dots" id="dots"></div>
     </div>
 
     <div class="facts">
@@ -99,7 +129,6 @@
       <ul>
         <li>🧠 פותרת בעיות עוד לפני שהן קורות.</li>
         <li>📸 גם התמונות ה"לא מוצלחות" שלה — מוצלחות.</li>
-        <li>⚡ עונה להודעות לפני שסיימת לכתוב אותן.</li>
         <li>🍕 לוקחת את הפרוסה הכי גדולה ומגיע לה.</li>
         <li>🏆 הוכתרה רשמית כ"אדם שאי אפשר לכעוס עליו".</li>
       </ul>
@@ -109,7 +138,7 @@
     <div class="count" id="countLine"></div>
 
     <p class="foot">
-      אתר זה הוקם באהבה (ובטרול) 💜<br>
+      האתר הזה הוקם באהבה על ידי עידו ❤️<br>
       © 2026 מועדון המעריצים של עמית · כל הזכויות שמורות לעמית · גם אלה שלא.
     </p>
   </div>
@@ -124,12 +153,23 @@
       'עמית מרגישה את האהבה ❤️',
       'עוד אחד! עמית מחייכת 😌',
       'אתה מעריץ מספר ' ,
-      'עמית: "מגיע לי" 👑',
-      'האינטרנט שוב נשבר 💥',
-      'נרשמת רשמית כמעריץ מושבע 🏅'
+      'עמית: "תודה, חמוד" 👑',
+      'נרשם בהצלחה 🏅',
+      'עמית ראתה את זה. כל הכבוד 👀',
+      'הלב של עמית גדל בקצת ❤️',
+      'עוד לחיצה, עוד חיוך 😄',
+      'אתה עכשיו רשמית מעריץ מאומת ✅',
+      'עמית: "ידעתי שתחזור" 😏',
+      'הלחיצה הזו עשתה לעמית את היום ☀️',
+      'מתועד. עמית גאה 📸',
+      'איכות מעריץ: מעולה ⭐',
+      'עמית שולחת לך אנרגיות טובות ✨',
+      'קליק מושלם. בדיוק כמו עמית 💛',
+      'אלוף. עמית מצדיעה 🫡',
+      'עוד נקודה במועדון המעריצים 🎟️'
     ];
     function paint() {
-      line.textContent = n ? ('🎉 לחצת ' + n + ' פעמים. עמית גאה בך.') : 'עדיין לא לחצת?! עמית רואה הכל 👀';
+      line.textContent = 'עוד לא לחצת? 👀';
     }
     paint();
 
@@ -158,6 +198,56 @@
       if (q.endsWith('מספר ')) q += (1000000 + n);
       line.textContent = '🎉 ' + q;
     });
+
+    // תמונת פרופיל מתחלפת כל 2 שניות
+    var profileImgs = ['amit.jpg','amit3.jpg','amit4.jpg','amit5.jpg'];
+    profileImgs.forEach(function(s){ var im = new Image(); im.src = s; });
+    var pImg = document.querySelector('.photo-frame img');
+    var pi = 0;
+    setInterval(function(){
+      pi = (pi + 1) % profileImgs.length;
+      pImg.style.opacity = '0';
+      setTimeout(function(){ pImg.src = profileImgs[pi]; pImg.style.opacity = '1'; }, 220);
+    }, 2000);
+
+    // קרוסלת "רגע היסטורי"
+    (function(){
+      var slides = document.getElementById('slides');
+      var carousel = slides.parentElement;
+      var slideEls = slides.children;
+      var dotsWrap = document.getElementById('dots');
+      var total = slideEls.length;
+      var idx = 0;
+      for (var d = 0; d < total; d++){
+        var dot = document.createElement('b');
+        (function(i){ dot.addEventListener('click', function(){ go(i); }); })(d);
+        dotsWrap.appendChild(dot);
+      }
+      function setHeight(){ carousel.style.height = slideEls[idx].offsetHeight + 'px'; }
+      function go(i){
+        idx = (i + total) % total;
+        slides.style.transform = 'translateX(' + (idx * 100) + '%)';
+        var dots = dotsWrap.children;
+        for (var k = 0; k < dots.length; k++) dots[k].className = (k === idx ? 'on' : '');
+        setHeight();
+      }
+      document.querySelector('.nav.next').addEventListener('click', function(){ go(idx + 1); });
+      document.querySelector('.nav.prev').addEventListener('click', function(){ go(idx - 1); });
+      // החלקה במובייל (swipe)
+      var startX = null;
+      carousel.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, { passive:true });
+      carousel.addEventListener('touchend', function(e){
+        if (startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) { go(dx < 0 ? idx + 1 : idx - 1); }
+        startX = null;
+      }, { passive:true });
+      slides.querySelectorAll('img').forEach(function(im){
+        if (im.complete) setHeight(); else im.addEventListener('load', setHeight);
+      });
+      window.addEventListener('resize', setHeight);
+      go(0);
+    })();
   </script>
 </body>
 </html>
