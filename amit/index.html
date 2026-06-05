@@ -74,7 +74,7 @@
     .facts li { margin:9px 0; font-weight:600; }
 
     .btn { font-family:inherit; cursor:pointer; border:none; background:var(--gold); color:var(--ink); font-weight:900; font-size:1.2rem; padding:16px 34px; border-radius:50px; box-shadow:0 8px 0 #c9a800; transition:transform .07s, box-shadow .07s; touch-action:manipulation; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none; }
-    .btn:active { transform:translateY(6px); box-shadow:0 2px 0 #c9a800; }
+    .btn:active, .btn.pressed { transform:translateY(6px); box-shadow:0 2px 0 #c9a800; }
     .count { margin-top:14px; font-weight:800; font-size:1.05rem; min-height:1.4em; }
 
     .foot { opacity:.8; font-size:.78rem; margin-top:30px; line-height:1.8; }
@@ -139,7 +139,7 @@
     <div class="count" id="countLine"></div>
 
     <p class="foot">
-      האתר הזה הוקם באהבה על ידי עידו ❤️<br>
+      אתר זה הוקם באהבה על ידי עידו ❤️<br>
       © 2026 מועדון המעריצים של עמית · כל הזכויות שמורות לעמית · גם אלה שלא.
     </p>
   </div>
@@ -198,6 +198,13 @@
       var q = quips[Math.floor(Math.random()*quips.length)];
       if (q.endsWith('מספר ')) q += (1000000 + n);
       line.textContent = '🎉 ' + q;
+    });
+
+    // אפקט "לחיצה" שעובד גם במובייל (לא רק :active בדסקטופ)
+    var loveBtn = document.getElementById('loveBtn');
+    loveBtn.addEventListener('pointerdown', function(){ loveBtn.classList.add('pressed'); });
+    ['pointerup','pointerleave','pointercancel'].forEach(function(ev){
+      loveBtn.addEventListener(ev, function(){ loveBtn.classList.remove('pressed'); });
     });
 
     // תמונת פרופיל מתחלפת כל 2 שניות
