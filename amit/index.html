@@ -80,6 +80,18 @@
     .foot { opacity:.8; font-size:.78rem; margin-top:30px; line-height:1.8; }
     .confetti { position:fixed; top:-20px; font-size:1.4rem; pointer-events:none; animation:fall linear forwards; z-index:50; }
     @keyframes fall { to { transform:translateY(105vh) rotate(540deg); opacity:.2; } }
+
+    /* ספירה לאחור לפגישה → ספירה-קדימה "ביחד" */
+    .cd { background:rgba(0,0,0,.24); border:1px solid rgba(255,255,255,.28); border-radius:22px; padding:18px 16px 20px; margin:2px 0 8px; backdrop-filter:blur(4px); box-shadow:0 10px 30px rgba(0,0,0,.25); }
+    .cd--up { background:linear-gradient(135deg,rgba(241,7,163,.30),rgba(123,47,247,.30)); border-color:rgba(255,214,0,.5); }
+    .cd__title { font-weight:900; font-size:1.12rem; line-height:1.35; margin-bottom:14px; }
+    .cd__title .em { font-size:1.35rem; }
+    .cd__units { display:flex; gap:9px; justify-content:center; direction:ltr; }
+    .cd__unit { background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.32); border-radius:14px; padding:11px 6px; min-width:62px; }
+    .cd__num { font-size:2rem; font-weight:900; color:var(--gold); line-height:1; font-variant-numeric:tabular-nums; text-shadow:2px 2px 0 rgba(0,0,0,.25); }
+    .cd__lbl { font-size:.7rem; opacity:.9; margin-top:7px; font-weight:600; }
+    .cd__sub { margin-top:13px; font-size:.85rem; opacity:.93; font-weight:600; }
+    @media (max-width:380px){ .cd__unit{ min-width:54px; } .cd__num{ font-size:1.7rem; } }
   </style>
 </head>
 <body>
@@ -89,6 +101,12 @@
   </div></div>
 
   <div class="wrap">
+    <section class="cd" id="cd">
+      <div class="cd__title" id="cdTitle"></div>
+      <div class="cd__units" id="cdUnits"></div>
+      <div class="cd__sub" id="cdSub"></div>
+    </section>
+
     <div class="crown">👑</div>
     <h1>עמית</h1>
     <p class="sub">ברוכים הבאים ל<b>מועדון המעריצים של עמית</b>.<br>אי אפשר שלא להיכנס · אין יציאה.</p>
@@ -173,6 +191,52 @@
       line.textContent = 'עוד לא לחצת? 👀';
     }
     paint();
+
+    // ⏳ ספירה לאחור לפגישה של עמית ועידו → ❤️ ספירה-קדימה "ביחד" לתמיד
+    (function(){
+      // חצות בלילה שבין 28 ל-29 ביוני 2026, בשעון פרו (לימה, UTC-5)
+      var meetAt = new Date('2026-06-29T00:00:00-05:00').getTime();
+      // עמית ועידו ביחד מאז 1 במרץ 2026 (שעון פרו)
+      var sinceAt = new Date('2026-03-01T00:00:00-05:00').getTime();
+      var cd = document.getElementById('cd');
+      var cdTitle = document.getElementById('cdTitle');
+      var cdUnits = document.getElementById('cdUnits');
+      var cdSub = document.getElementById('cdSub');
+      var phase = '', firstRun = true;
+      function pad(x){ return (x < 10 ? '0' : '') + x; }
+      function unit(num, lbl){
+        return '<div class="cd__unit"><div class="cd__num">' + num + '</div><div class="cd__lbl">' + lbl + '</div></div>';
+      }
+      function tick(){
+        var now = Date.now();
+        if (now < meetAt) {
+          if (phase !== 'down') {
+            phase = 'down';
+            cd.classList.remove('cd--up');
+            cdTitle.innerHTML = 'עמית ועידו נפגשים בעוד <span class="em">💞</span>';
+            cdSub.textContent = 'הספירה לאיחוד הגדול 🤍';
+          }
+          var s = Math.floor((meetAt - now) / 1000);
+          var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+          cdUnits.innerHTML = unit(pad(h), 'שעות') + unit(pad(m), 'דקות') + unit(pad(sec), 'שניות');
+        } else {
+          if (phase !== 'up') {
+            phase = 'up';
+            cd.classList.add('cd--up');
+            cdTitle.innerHTML = 'עמית ועידו ביחד כבר <span class="em">❤️</span>';
+            cdSub.textContent = 'מאז 1 במרץ · ולתמיד 💞';
+            if (!firstRun) confettiBurst();
+          }
+          var s2 = Math.floor((now - sinceAt) / 1000);
+          var d = Math.floor(s2 / 86400);
+          var h2 = Math.floor((s2 % 86400) / 3600), m2 = Math.floor((s2 % 3600) / 60), sec2 = s2 % 60;
+          cdUnits.innerHTML = unit(d, 'ימים') + unit(pad(h2), 'שעות') + unit(pad(m2), 'דקות') + unit(pad(sec2), 'שניות');
+        }
+        firstRun = false;
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
 
     function confettiBurst() {
       var emojis = ['👑','❤️','✨','🎉','💜','🏆','😂'];
