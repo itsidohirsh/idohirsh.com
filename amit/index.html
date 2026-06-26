@@ -207,19 +207,20 @@
       var cdSub = document.getElementById('cdSub');
       var cdNote = document.getElementById('cdNote');
       var phase = '', firstRun = true;
+      var forceUp = /[?&]up\b/.test(location.search); // תצוגה מקדימה מקומית בלבד: ?up מדמה את שלב ה"ביחד"
       function pad(x){ return (x < 10 ? '0' : '') + x; }
       function unit(num, lbl){
         return '<div class="cd__unit"><div class="cd__num">' + num + '</div><div class="cd__lbl">' + lbl + '</div></div>';
       }
       function tick(){
         var now = Date.now();
-        if (now < meetAt) {
+        if (now < meetAt && !forceUp) {
           if (phase !== 'down') {
             phase = 'down';
             cd.classList.remove('cd--up');
             cdTitle.innerHTML = 'עמית ועידו נפגשים בעוד <span class="em">💞</span>';
             cdSub.textContent = 'הספירה לאיחוד הגדול 🤍';
-            cdNote.innerHTML = '<b>נפגשים: חצות שבין 28 ל-29.6, שעון לימה 🇵🇪</b><br>זו הספירה עד הרגע האמיתי של הפגישה. היא כוללת את פער השעון (13 שעות) ואת הטיסה, אז זה הזמן המלא עד שניפגש, לא פחות.';
+            cdNote.textContent = 'נפגשים: חצות שבין 28 ל-29.6, שעון לימה 🇵🇪';
           }
           var s = Math.floor((meetAt - now) / 1000);
           var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
@@ -229,7 +230,7 @@
             phase = 'up';
             cd.classList.add('cd--up');
             cdTitle.innerHTML = 'עמית ועידו ביחד כבר <span class="em">❤️</span>';
-            cdSub.textContent = 'מאז 1 במרץ · ולתמיד 💞';
+            cdSub.textContent = 'מאז 1 במרץ 2026 ולתמיד 💞';
             cdNote.textContent = '';
             if (!firstRun) confettiBurst();
           }
