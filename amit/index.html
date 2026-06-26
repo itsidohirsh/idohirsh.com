@@ -91,6 +91,8 @@
     .cd__num { font-size:2rem; font-weight:900; color:var(--gold); line-height:1; font-variant-numeric:tabular-nums; text-shadow:2px 2px 0 rgba(0,0,0,.25); }
     .cd__lbl { font-size:.7rem; opacity:.9; margin-top:7px; font-weight:600; }
     .cd__sub { margin-top:13px; font-size:.85rem; opacity:.93; font-weight:600; }
+    .cd__note { margin-top:9px; font-size:.66rem; line-height:1.55; font-weight:500; color:rgba(255,255,255,.42); }
+    .cd__note b { color:rgba(255,255,255,.62); font-weight:700; }
     @media (max-width:380px){ .cd__unit{ min-width:54px; } .cd__num{ font-size:1.7rem; } }
   </style>
 </head>
@@ -105,6 +107,7 @@
       <div class="cd__title" id="cdTitle"></div>
       <div class="cd__units" id="cdUnits"></div>
       <div class="cd__sub" id="cdSub"></div>
+      <div class="cd__note" id="cdNote"></div>
     </section>
 
     <div class="crown">👑</div>
@@ -202,6 +205,7 @@
       var cdTitle = document.getElementById('cdTitle');
       var cdUnits = document.getElementById('cdUnits');
       var cdSub = document.getElementById('cdSub');
+      var cdNote = document.getElementById('cdNote');
       var phase = '', firstRun = true;
       function pad(x){ return (x < 10 ? '0' : '') + x; }
       function unit(num, lbl){
@@ -215,6 +219,7 @@
             cd.classList.remove('cd--up');
             cdTitle.innerHTML = 'עמית ועידו נפגשים בעוד <span class="em">💞</span>';
             cdSub.textContent = 'הספירה לאיחוד הגדול 🤍';
+            cdNote.innerHTML = '<b>נפגשים: חצות שבין 28 ל-29.6, שעון לימה 🇵🇪</b><br>זו הספירה עד הרגע האמיתי של הפגישה. היא כוללת את פער השעון (13 שעות) ואת הטיסה, אז זה הזמן המלא עד שניפגש, לא פחות.';
           }
           var s = Math.floor((meetAt - now) / 1000);
           var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
@@ -225,6 +230,7 @@
             cd.classList.add('cd--up');
             cdTitle.innerHTML = 'עמית ועידו ביחד כבר <span class="em">❤️</span>';
             cdSub.textContent = 'מאז 1 במרץ · ולתמיד 💞';
+            cdNote.textContent = '';
             if (!firstRun) confettiBurst();
           }
           var s2 = Math.floor((now - sinceAt) / 1000);
